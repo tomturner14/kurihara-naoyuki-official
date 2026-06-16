@@ -499,77 +499,216 @@ h3 {
   }
 }
 
-/* Hero artist photo */
-.hero-copy {
+/* Home hero artist photo */
+.home-site-header {
+  background:
+    linear-gradient(
+      90deg,
+      #050b18 0%,
+      #06142f 30%,
+      #071d4d 52%,
+      #06173b 76%,
+      #020713 100%
+    ),
+    radial-gradient(
+      circle at 62% 30%,
+      rgba(0, 82, 210, 0.5),
+      transparent 30rem
+    ),
+    radial-gradient(
+      circle at 80% 38%,
+      rgba(0, 190, 255, 0.18),
+      transparent 26rem
+    ),
+    radial-gradient(
+      circle at 34% 72%,
+      rgba(0, 38, 92, 0.44),
+      transparent 34rem
+    ),
+    #050b18;
+}
+
+.home-site-header::after {
+  background: rgba(0, 92, 190, 0.12);
+}
+
+.header-inner {
+  width: min(100% - 48px, 1280px);
+}
+
+.home-hero-copy {
+  position: relative;
   width: 100%;
   max-width: none;
+  min-height: 620px;
   padding: 72px 0 88px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 400px);
+  grid-template-columns: minmax(420px, 0.78fr) minmax(460px, 1fr);
   align-items: center;
-  gap: clamp(40px, 6vw, 80px);
+  gap: clamp(36px, 5vw, 80px);
 }
 
 .hero-text {
-  max-width: 780px;
+  position: relative;
+  z-index: 4;
+  max-width: 720px;
+}
+
+.home-hero-copy .eyebrow {
+  color: rgba(255, 218, 138, 0.94);
+}
+
+.home-hero-copy #artist-name {
+  color: #ffffff;
+  white-space: nowrap;
+  text-shadow: 0 12px 36px rgba(0, 0, 0, 0.38);
+}
+
+.home-hero-copy .hero-subtitle {
+  color: rgba(255, 255, 255, 0.94);
 }
 
 .hero-portrait {
-  position: relative;
-  justify-self: end;
-  width: min(100%, 400px);
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: min(3vw, 48px);
+  bottom: 0;
+  width: min(46vw, 640px);
   margin: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      90deg,
+      #050b18 0%,
+      #06183a 40%,
+      #071f55 68%,
+      #020713 100%
+    );
 }
 
 .hero-portrait::before {
   content: "";
   position: absolute;
-  inset: 22px -20px -20px 22px;
-  border-radius: 36px;
-  background: linear-gradient(
-    135deg,
-    rgba(47, 128, 237, 0.42),
-    rgba(216, 169, 74, 0.28)
-  );
-  z-index: 0;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(
+      90deg,
+      #050b18 0%,
+      rgba(5, 11, 24, 0.92) 16%,
+      rgba(5, 11, 24, 0.58) 34%,
+      rgba(5, 11, 24, 0.16) 58%,
+      rgba(5, 11, 24, 0.06) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(5, 11, 24, 0.02) 0%,
+      rgba(5, 11, 24, 0.08) 58%,
+      rgba(5, 11, 24, 0.28) 100%
+    );
+  pointer-events: none;
+}
+
+.hero-portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    radial-gradient(
+      circle at 62% 24%,
+      rgba(0, 198, 255, 0.12),
+      transparent 18rem
+    ),
+    radial-gradient(
+      circle at 48% 58%,
+      rgba(0, 70, 190, 0.12),
+      transparent 24rem
+    );
+  pointer-events: none;
 }
 
 .hero-portrait img {
-  position: relative;
-  z-index: 1;
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 5;
+  height: 100%;
   object-fit: cover;
-  object-position: center center;
-  border: 8px solid rgba(255, 255, 255, 0.82);
-  border-radius: 32px;
-  box-shadow: 0 26px 64px rgba(23, 32, 51, 0.22);
+  object-position: center 34%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+}
+
+@media (max-width: 1100px) {
+  .home-hero-copy {
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.86fr);
+  }
+
+  .home-hero-copy #artist-name {
+    white-space: normal;
+  }
+
+  .hero-portrait {
+    right: 24px;
+    width: min(44vw, 560px);
+  }
+
+  .hero-portrait img {
+    object-position: center 32%;
+  }
 }
 
 @media (max-width: 900px) {
-  .hero-copy {
+  .home-site-header {
+    background:
+      linear-gradient(
+        180deg,
+        #050b18 0%,
+        #07142d 42%,
+        #061b49 70%,
+        #050b18 100%
+      );
+  }
+
+  .header-inner {
+    width: min(100% - 32px, 1040px);
+  }
+
+  .home-hero-copy {
+    min-height: auto;
     grid-template-columns: 1fr;
     padding: 56px 0 72px;
   }
 
   .hero-portrait {
-    justify-self: start;
-    width: min(100%, 360px);
+    position: relative;
+    right: auto;
+    width: 100%;
+    height: auto;
+    margin-top: 28px;
   }
 
   .hero-portrait::before {
-    inset: 16px -14px -14px 16px;
-    border-radius: 30px;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(5, 11, 24, 0.04) 0%,
+        rgba(5, 11, 24, 0.18) 100%
+      );
   }
 
   .hero-portrait img {
-    border-radius: 28px;
+    aspect-ratio: 4 / 5;
+    height: auto;
+    object-fit: cover;
+    object-position: center top;
   }
 }
 
 @media (max-width: 420px) {
-  .hero-portrait {
-    width: min(100%, 320px);
+  .hero-portrait img {
+    aspect-ratio: 3 / 4;
   }
 }
