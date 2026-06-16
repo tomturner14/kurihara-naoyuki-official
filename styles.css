@@ -136,3 +136,12 @@ p {
   color: #4b5563;
   font-size: 0.9375rem;
 }
+
+.profile-content {
+  display: grid;
+  gap: 20px;
+}
+
+.profile-block p {
+  max-width: 720px;
+}
