@@ -498,3 +498,78 @@ h3 {
     height: 30px;
   }
 }
+
+/* Hero artist photo */
+.hero-copy {
+  width: 100%;
+  max-width: none;
+  padding: 72px 0 88px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 400px);
+  align-items: center;
+  gap: clamp(40px, 6vw, 80px);
+}
+
+.hero-text {
+  max-width: 780px;
+}
+
+.hero-portrait {
+  position: relative;
+  justify-self: end;
+  width: min(100%, 400px);
+  margin: 0;
+}
+
+.hero-portrait::before {
+  content: "";
+  position: absolute;
+  inset: 22px -20px -20px 22px;
+  border-radius: 36px;
+  background: linear-gradient(
+    135deg,
+    rgba(47, 128, 237, 0.42),
+    rgba(216, 169, 74, 0.28)
+  );
+  z-index: 0;
+}
+
+.hero-portrait img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center center;
+  border: 8px solid rgba(255, 255, 255, 0.82);
+  border-radius: 32px;
+  box-shadow: 0 26px 64px rgba(23, 32, 51, 0.22);
+}
+
+@media (max-width: 900px) {
+  .hero-copy {
+    grid-template-columns: 1fr;
+    padding: 56px 0 72px;
+  }
+
+  .hero-portrait {
+    justify-self: start;
+    width: min(100%, 360px);
+  }
+
+  .hero-portrait::before {
+    inset: 16px -14px -14px 16px;
+    border-radius: 30px;
+  }
+
+  .hero-portrait img {
+    border-radius: 28px;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-portrait {
+    width: min(100%, 320px);
+  }
+}
