@@ -501,38 +501,14 @@ h3 {
 
 /* Home hero artist photo */
 .home-site-header {
-  background:
-    linear-gradient(
-      90deg,
-      #050b18 0%,
-      #06142f 30%,
-      #071d4d 52%,
-      #06173b 76%,
-      #020713 100%
-    ),
-    radial-gradient(
-      circle at 62% 30%,
-      rgba(0, 82, 210, 0.5),
-      transparent 30rem
-    ),
-    radial-gradient(
-      circle at 80% 38%,
-      rgba(0, 190, 255, 0.18),
-      transparent 26rem
-    ),
-    radial-gradient(
-      circle at 34% 72%,
-      rgba(0, 38, 92, 0.44),
-      transparent 34rem
-    ),
-    #050b18;
+  background: #030e20;
 }
 
 .home-site-header::after {
-  background: rgba(0, 92, 190, 0.12);
+  display: none;
 }
 
-.header-inner {
+.home-site-header .header-inner {
   width: min(100% - 48px, 1280px);
 }
 
@@ -574,7 +550,7 @@ h3 {
   top: 0;
   right: min(3vw, 48px);
   bottom: 0;
-  width: min(46vw, 640px);
+  width: min(20vw, 400px);
   margin: 0;
   overflow: hidden;
   background:
@@ -652,27 +628,20 @@ h3 {
 
   .hero-portrait {
     right: 24px;
-    width: min(44vw, 560px);
+    width: min(24vw, 360px);
   }
 
   .hero-portrait img {
-    object-position: center 32%;
+    object-position: center 34%;
   }
 }
 
 @media (max-width: 900px) {
   .home-site-header {
-    background:
-      linear-gradient(
-        180deg,
-        #050b18 0%,
-        #07142d 42%,
-        #061b49 70%,
-        #050b18 100%
-      );
+    background: #030e20;
   }
 
-  .header-inner {
+  .home-site-header .header-inner {
     width: min(100% - 32px, 1040px);
   }
 
