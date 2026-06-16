@@ -1,3 +1,6 @@
+const SITE_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS30hnzMlKNn3KQp4ZDetB1xmt8oL8cT7b77t9i4z8D24PV9yzBJ9tBWq1pQgVFBdjTtbPcWngG_8o2/pub?gid=0&single=true&output=csv";
+
 const PROFILE_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS30hnzMlKNn3KQp4ZDetB1xmt8oL8cT7b77t9i4z8D24PV9yzBJ9tBWq1pQgVFBdjTtbPcWngG_8o2/pub?gid=1870206096&single=true&output=csv";
 
@@ -11,11 +14,23 @@ const CONTACT_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS30hnzMlKNn3KQp4ZDetB1xmt8oL8cT7b77t9i4z8D24PV9yzBJ9tBWq1pQgVFBdjTtbPcWngG_8o2/pub?gid=2088961688&single=true&output=csv";
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadSite();
   loadProfile();
   loadNews();
   loadSchedule();
   loadContact();
 });
+
+async function loadSite() {
+  try {
+    const rows = await fetchCsvObjects(SITE_CSV_URL);
+    const siteSettings = rowsToSettings(rows);
+
+    applySiteSettings(siteSettings);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 async function loadProfile() {
   const profileContent = document.querySelector("#profile-content");
@@ -110,6 +125,46 @@ async function fetchCsvObjects(url) {
 
   const csvText = await response.text();
   return csvToObjects(csvText);
+}
+
+function rowsToSettings(rows) {
+  return rows.reduce((settings, row) => {
+    const key = row["設定キー"];
+    const value = row["値"];
+
+    if (key && value) {
+      settings[key] = value;
+    }
+
+    return settings;
+  }, {});
+}
+
+function applySiteSettings(settings) {
+  setText("#hero-label", settings.hero_label);
+  setText("#artist-name", settings.artist_name);
+  setText("#hero-description", settings.hero_description);
+  setText("#copyright", settings.copyright);
+
+  if (settings.site_title) {
+    document.title = settings.site_title;
+  }
+
+  const description = document.querySelector('meta[name="description"]');
+
+  if (description && settings.hero_description) {
+    description.setAttribute("content", settings.hero_description);
+  }
+}
+
+function setText(selector, value) {
+  const element = document.querySelector(selector);
+
+  if (!element || !value) {
+    return;
+  }
+
+  element.textContent = value;
 }
 
 function renderProfile(profileItems, container) {
