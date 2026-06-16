@@ -437,7 +437,9 @@ function escapeHtml(value) {
 
 function escapeAttribute(value) {
   return escapeHtml(value).replaceAll("`", "&#096;");
-}\n\n// 並び順ルール:
+}
+
+// 並び順ルール:
 // - news: 公開日の新しい順。同じ日付なら表示順の小さい順。
 // - schedule: 開催日の新しい順。同じ日付なら開始時刻の早い順。
 // - profile/contact: 表示順の小さい順。
