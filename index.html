@@ -1,79 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>栗原直行オフィシャルサイト</title>
-  <meta name="description" content="栗原直行のプロフィール、出演情報、お知らせ、活動実績を掲載するオフィシャルサイトです。" />
+    <title>栗原直行オフィシャルサイト</title>
+    <meta
+      name="description"
+      content="栗原直行のプロフィール、出演情報、お知らせ、活動実績を掲載するオフィシャルサイトです。"
+    />
 
-  <link rel="stylesheet" href="styles.css?v=20260616-5" />
-  <script src="script.js?v=20260616-6" defer></script>
-</head>
-<body>
-  <header id="top" class="site-header">
-    <nav class="site-nav" aria-label="メインナビゲーション">
-      <div class="container nav-inner">
-        <a class="nav-logo" href="#top">栗原直行</a>
-        <div class="nav-links">
-          <a href="#profile">Profile</a>
-          <a href="#news">News</a>
-          <a href="#schedule">Schedule</a>
-          <a href="#contact">Contact</a>
+    <link rel="stylesheet" href="styles.css?v=20260616-6" />
+    <script src="script.js?v=20260616-6" defer></script>
+  </head>
+  <body>
+    <header id="top" class="site-header">
+      <nav class="site-nav" aria-label="メインナビゲーション">
+        <div class="container nav-inner">
+          <a class="nav-logo" href="#top">栗原直行</a>
+          <div class="nav-links">
+            <a href="#news">News</a>
+            <a href="#schedule">Schedule</a>
+            <a href="#profile">Profile</a>
+            <a href="#contact">Contact</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container header-inner">
+        <div class="hero-copy">
+          <p id="hero-label" class="eyebrow">Official Website</p>
+          <h1 id="artist-name">栗原直行</h1>
+          <p class="hero-subtitle">NAOYUKI KURIHARA OFFICIAL WEBSITE</p>
+          <p id="hero-description" class="lead">
+            プロフィール、出演情報、お知らせを掲載する公式サイトです。
+          </p>
         </div>
       </div>
-    </nav>
-    <div class="container header-inner">
-      <div>
-        <p id="hero-label" class="eyebrow">Official Website</p>
-        <h1 id="artist-name">栗原直行</h1>
-        <p id="hero-description" class="lead">プロフィール、出演情報、お知らせを掲載する公式サイトです。</p>
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <main>
-    <section id="profile" class="section profile-section">
+    <main>
+      <section id="news" class="section news-section">
+        <div class="container section-inner">
+          <div class="section-heading">
+            <p class="section-kicker">Information</p>
+            <h2>News</h2>
+          </div>
+          <div id="news-list" class="card-list" aria-live="polite">
+            <p class="muted">お知らせを読み込んでいます。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="schedule" class="section schedule-section">
+        <div class="container section-inner">
+          <div class="section-heading">
+            <p class="section-kicker">Live / Event</p>
+            <h2>Schedule</h2>
+          </div>
+          <div id="schedule-list" class="card-list" aria-live="polite">
+            <p class="muted">出演情報を読み込んでいます。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="profile" class="section profile-section">
+        <div class="container section-inner">
+          <div class="section-heading">
+            <p class="section-kicker">Biography</p>
+            <h2>Profile</h2>
+          </div>
+          <div id="profile-content" class="profile-content" aria-live="polite">
+            <p class="muted">プロフィールを読み込んでいます。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="section contact-section">
+        <div class="container section-inner">
+          <div class="section-heading">
+            <p class="section-kicker">Contact</p>
+            <h2>Contact</h2>
+          </div>
+          <div id="contact-content" class="contact-content" aria-live="polite">
+            <p class="muted">お問い合わせ情報を読み込んでいます。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
       <div class="container">
-        <h2>Profile</h2>
-        <div id="profile-content" class="profile-content" aria-live="polite">
-          <p class="muted">プロフィールを読み込んでいます。</p>
-        </div>
+        <small id="copyright">&copy; 2026 Studio Romancing</small>
       </div>
-    </section>
-
-    <section id="news" class="section news-section">
-      <div class="container">
-        <h2>News</h2>
-        <div id="news-list" class="card-list" aria-live="polite">
-          <p class="muted">お知らせを読み込んでいます。</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="schedule" class="section schedule-section">
-      <div class="container">
-        <h2>Schedule</h2>
-        <div id="schedule-list" class="card-list" aria-live="polite">
-          <p class="muted">出演情報を読み込んでいます。</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="section contact-section">
-      <div class="container">
-        <h2>Contact</h2>
-        <div id="contact-content" class="contact-content" aria-live="polite">
-          <p class="muted">お問い合わせ情報を読み込んでいます。</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container">
-      <small id="copyright">&copy; 2026 栗原直行</small>
-    </div>
-  </footer>
-</body>
+    </footer>
+  </body>
 </html>
