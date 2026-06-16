@@ -2,6 +2,10 @@
 
 栗原直行さんのプロフィール、出演情報、お知らせ、活動実績などを掲載する公式サイトです。
 
+## 公開URL
+
+https://tomturner14.github.io/kurihara-naoyuki-official/
+
 ## 公開方式
 
 - GitHub Pages
