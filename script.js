@@ -335,23 +335,6 @@ function createTimeText(startTime, endTime) {
   return "";
 }
 
-function compareBySortOrder(a, b) {
-  const sortA = Number(a["表示順"] || a["sort_order"] || 9999);
-  const sortB = Number(b["表示順"] || b["sort_order"] || 9999);
-
-  return sortA - sortB;
-}
-
-function compareScheduleItems(a, b) {
-  const sortResult = compareBySortOrder(a, b);
-
-  if (sortResult !== 0) {
-    return sortResult;
-  }
-
-  return String(a["開催日"] || "").localeCompare(String(b["開催日"] || ""));
-}
-
 function csvToObjects(csvText) {
   const rows = parseCsv(csvText);
 
