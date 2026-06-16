@@ -65,7 +65,7 @@ async function loadNews() {
 
     const publicNews = rows
       .filter((row) => isChecked(row["表示する"]))
-      .sort(compareBySortOrder);
+      .sort(compareNewsItems);
 
     renderNews(publicNews, newsList);
   } catch (error) {
@@ -129,7 +129,8 @@ async function fetchCsvObjects(url) {
 
 function rowsToSettings(rows) {
   return rows.reduce((settings, row) => {
-    const key = row["設定キー"];
+    const rawKey = row["設定キー"] || row["項目名"];
+    const key = normalizeSiteSettingKey(rawKey);
     const value = row["値"];
 
     if (key && value) {
@@ -138,6 +139,20 @@ function rowsToSettings(rows) {
 
     return settings;
   }, {});
+}
+
+function normalizeSiteSettingKey(key) {
+  const keyText = String(key || "").trim();
+
+  const keyMap = {
+    サイトタイトル: "site_title",
+    表示名: "artist_name",
+    小見出し: "hero_label",
+    説明文: "hero_description",
+    コピーライト: "copyright",
+  };
+
+  return keyMap[keyText] || keyText;
 }
 
 function applySiteSettings(settings) {
@@ -422,4 +437,133 @@ function escapeHtml(value) {
 
 function escapeAttribute(value) {
   return escapeHtml(value).replaceAll("`", "&#096;");
+}\n\n// 並び順ルール:
+// - news: 公開日の新しい順。同じ日付なら表示順の小さい順。
+// - schedule: 開催日の新しい順。同じ日付なら開始時刻の早い順。
+// - profile/contact: 表示順の小さい順。
+function compareNewsItems(a, b) {
+  const dateResult = compareDateDesc(a["公開日"], b["公開日"]);
+
+  if (dateResult !== 0) {
+    return dateResult;
+  }
+
+  return compareBySortOrder(a, b);
+}
+
+function compareScheduleItems(a, b) {
+  const dateResult = compareDateDesc(a["開催日"], b["開催日"]);
+
+  if (dateResult !== 0) {
+    return dateResult;
+  }
+
+  const timeResult = compareTimeAsc(a["開始時刻"], b["開始時刻"]);
+
+  if (timeResult !== 0) {
+    return timeResult;
+  }
+
+  return compareBySortOrder(a, b);
+}
+
+function compareBySortOrder(a, b) {
+  const orderA = parseSortOrder(a["表示順"]);
+  const orderB = parseSortOrder(b["表示順"]);
+
+  if (orderA !== null && orderB !== null) {
+    return orderA - orderB;
+  }
+
+  if (orderA !== null) {
+    return -1;
+  }
+
+  if (orderB !== null) {
+    return 1;
+  }
+
+  return 0;
+}
+
+function compareDateDesc(a, b) {
+  const dateA = parseDateValue(a);
+  const dateB = parseDateValue(b);
+
+  if (dateA !== null && dateB !== null) {
+    return dateB - dateA;
+  }
+
+  if (dateA !== null) {
+    return -1;
+  }
+
+  if (dateB !== null) {
+    return 1;
+  }
+
+  return 0;
+}
+
+function compareTimeAsc(a, b) {
+  const timeA = parseTimeValue(a);
+  const timeB = parseTimeValue(b);
+
+  if (timeA !== null && timeB !== null) {
+    return timeA - timeB;
+  }
+
+  if (timeA !== null) {
+    return -1;
+  }
+
+  if (timeB !== null) {
+    return 1;
+  }
+
+  return 0;
+}
+
+function parseSortOrder(value) {
+  const order = Number.parseInt(String(value || "").trim(), 10);
+  return Number.isFinite(order) ? order : null;
+}
+
+function parseDateValue(value) {
+  const dateText = String(value || "").trim();
+
+  if (!dateText) {
+    return null;
+  }
+
+  const match = dateText.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/);
+
+  if (!match) {
+    return null;
+  }
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+
+  return new Date(year, month - 1, day).getTime();
+}
+
+function parseTimeValue(value) {
+  const timeText = String(value || "").trim();
+
+  if (!timeText || timeText === "未定") {
+    return null;
+  }
+
+  const match = timeText.match(/^(\d{1,2}):(\d{2})$/);
+
+  if (!match) {
+    return null;
+  }
+
+  const hour = Number(match[1]);
+  const minute = Number(match[2]);
+
+  return hour * 60 + minute;
 }
