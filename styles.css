@@ -91,3 +91,43 @@ p {
   background: #1f2933;
   color: #fff;
 }
+
+.card-list {
+  display: grid;
+  gap: 16px;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 2px 10px;
+  border: 1px solid #d6c6a8;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: #4b5563;
+  background: #fbf7ef;
+}
+
+.card-link {
+  margin-top: 12px;
+}
+
+.card-link a {
+  color: #1f2933;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.muted {
+  color: #6b7280;
+}
