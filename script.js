@@ -1,8 +1,12 @@
 const NEWS_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS30hnzMlKNn3KQp4ZDetB1xmt8oL8cT7b77t9i4z8D24PV9yzBJ9tBWq1pQgVFBdjTtbPcWngG_8o2/pub?gid=1719756214&single=true&output=csv";
 
+const SCHEDULE_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS30hnzMlKNn3KQp4ZDetB1xmt8oL8cT7b77t9i4z8D24PV9yzBJ9tBWq1pQgVFBdjTtbPcWngG_8o2/pub?gid=833776285&single=true&output=csv";
+
 document.addEventListener("DOMContentLoaded", () => {
   loadNews();
+  loadSchedule();
 });
 
 async function loadNews() {
@@ -13,14 +17,7 @@ async function loadNews() {
   }
 
   try {
-    const response = await fetch(`${NEWS_CSV_URL}&cacheBust=${Date.now()}`);
-
-    if (!response.ok) {
-      throw new Error(`CSVの取得に失敗しました: ${response.status}`);
-    }
-
-    const csvText = await response.text();
-    const rows = csvToObjects(csvText);
+    const rows = await fetchCsvObjects(NEWS_CSV_URL);
 
     const publicNews = rows
       .filter((row) => isChecked(row["表示する"]))
@@ -33,6 +30,38 @@ async function loadNews() {
   }
 }
 
+async function loadSchedule() {
+  const scheduleList = document.querySelector("#schedule-list");
+
+  if (!scheduleList) {
+    return;
+  }
+
+  try {
+    const rows = await fetchCsvObjects(SCHEDULE_CSV_URL);
+
+    const publicSchedules = rows
+      .filter((row) => isChecked(row["表示する"]))
+      .sort(compareScheduleItems);
+
+    renderSchedule(publicSchedules, scheduleList);
+  } catch (error) {
+    console.error(error);
+    scheduleList.innerHTML = '<p class="muted">出演情報を読み込めませんでした。</p>';
+  }
+}
+
+async function fetchCsvObjects(url) {
+  const response = await fetch(`${url}&cacheBust=${Date.now()}`);
+
+  if (!response.ok) {
+    throw new Error(`CSVの取得に失敗しました: ${response.status}`);
+  }
+
+  const csvText = await response.text();
+  return csvToObjects(csvText);
+}
+
 function renderNews(newsItems, container) {
   if (newsItems.length === 0) {
     container.innerHTML = '<p class="muted">現在、掲載中のお知らせはありません。</p>';
@@ -40,6 +69,15 @@ function renderNews(newsItems, container) {
   }
 
   container.innerHTML = newsItems.map(createNewsCardHtml).join("");
+}
+
+function renderSchedule(scheduleItems, container) {
+  if (scheduleItems.length === 0) {
+    container.innerHTML = '<p class="muted">現在、掲載中の出演情報はありません。</p>';
+    return;
+  }
+
+  container.innerHTML = scheduleItems.map(createScheduleCardHtml).join("");
 }
 
 function createNewsCardHtml(item) {
@@ -68,6 +106,68 @@ function createNewsCardHtml(item) {
       ${linkHtml}
     </article>
   `;
+}
+
+function createScheduleCardHtml(item) {
+  const date = escapeHtml(item["開催日"] || "");
+  const startTime = escapeHtml(item["開始時刻"] || "");
+  const endTime = escapeHtml(item["終了時刻"] || "");
+  const title = escapeHtml(item["イベント名"] || "");
+  const venue = escapeHtml(item["会場名"] || "");
+  const area = escapeHtml(item["地域"] || "");
+  const detail = escapeHtml(item["詳細"] || "");
+  const linkText = escapeHtml(item["リンク文字"] || "");
+  const linkUrl = item["リンクURL"] || "";
+
+  const timeText = createTimeText(startTime, endTime);
+  const placeText = [venue, area].filter(Boolean).join(" / ");
+
+  const timeHtml = timeText ? `<p class="schedule-detail">${timeText}</p>` : "";
+  const placeHtml = placeText ? `<p class="schedule-detail">${escapeHtml(placeText)}</p>` : "";
+  const detailHtml = detail ? `<p>${detail}</p>` : "";
+
+  const linkHtml =
+    linkText && linkUrl
+      ? `<p class="card-link"><a href="${escapeAttribute(linkUrl)}" target="_blank" rel="noopener noreferrer">${linkText}</a></p>`
+      : "";
+
+  return `
+    <article class="card">
+      <p class="date">${date}</p>
+      <h3>${title}</h3>
+      ${timeHtml}
+      ${placeHtml}
+      ${detailHtml}
+      ${linkHtml}
+    </article>
+  `;
+}
+
+function createTimeText(startTime, endTime) {
+  if (startTime && endTime) {
+    return `${startTime}〜${endTime}`;
+  }
+
+  if (startTime) {
+    return `${startTime}〜`;
+  }
+
+  if (endTime) {
+    return `〜${endTime}`;
+  }
+
+  return "";
+}
+
+function compareScheduleItems(a, b) {
+  const sortA = Number(a["表示順"] || 9999);
+  const sortB = Number(b["表示順"] || 9999);
+
+  if (sortA !== sortB) {
+    return sortA - sortB;
+  }
+
+  return String(a["開催日"] || "").localeCompare(String(b["開催日"] || ""));
 }
 
 function csvToObjects(csvText) {
