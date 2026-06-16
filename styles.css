@@ -145,3 +145,12 @@ p {
 .profile-block p {
   max-width: 720px;
 }
+
+.contact-content {
+  display: grid;
+  gap: 20px;
+}
+
+.contact-block p {
+  max-width: 720px;
+}
