@@ -1414,74 +1414,57 @@ h3 {
   }
 }
 
-/* Page header mobile title adjustment */
-.page-header h1 {
-  max-width: 100%;
-}
-
+/* Lower page hero mobile final */
 @media (max-width: 760px) {
-  .page-header h1 {
-    font-size: clamp(2.8rem, 12vw, 4.2rem);
-    letter-spacing: 0.02em;
-    overflow-wrap: anywhere;
-  }
-}
-
-@media (max-width: 420px) {
-  .page-header h1 {
-    font-size: clamp(2.35rem, 10.5vw, 3.25rem);
-  }
-}
-
-/* Lower page hero mobile adjustment */
-@media (max-width: 760px) {
-  .page-header {
-    min-height: 300px;
+  .site-header.page-header {
+    min-height: auto !important;
   }
 
-  .page-header-inner {
-    min-height: 250px;
-    padding-top: 34px;
-    padding-bottom: 34px;
+  .site-header.page-header .header-inner.page-header-inner {
+    min-height: 260px !important;
+    padding-top: 28px;
+    padding-bottom: 28px;
   }
 
-  .page-header .eyebrow {
+  .site-header.page-header .hero-copy {
+    max-width: 100%;
+  }
+
+  .site-header.page-header .eyebrow {
     margin-bottom: 18px;
     font-size: 0.8rem;
     letter-spacing: 0.36em;
   }
 
-  .page-header h1 {
+  .site-header.page-header h1 {
     max-width: 100%;
-    font-size: clamp(3rem, 15vw, 4.2rem);
+    font-size: clamp(2.75rem, 13.6vw, 3.75rem);
     line-height: 1.02;
     letter-spacing: 0.02em;
     overflow-wrap: normal;
     word-break: normal;
   }
 
-  .page-header .hero-subtitle {
-    margin-top: 18px;
+  .site-header.page-header .hero-subtitle {
+    margin-top: 16px;
     font-size: 0.95rem;
   }
 
-  .page-header .lead {
-    margin-top: 18px;
+  .site-header.page-header .lead {
+    margin-top: 16px;
     font-size: 0.95rem;
-    line-height: 1.8;
+    line-height: 1.75;
   }
 }
 
 @media (max-width: 420px) {
-  .page-header {
-    min-height: 280px;
+  .site-header.page-header .header-inner.page-header-inner {
+    min-height: 235px !important;
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
 
-  .page-header-inner {
-    min-height: 235px;
-  }
-
-  .page-header h1 {
-    font-size: clamp(2.75rem, 13.6vw, 3.75rem);
+  .site-header.page-header h1 {
+    font-size: clamp(2.65rem, 13vw, 3.55rem);
   }
 }
