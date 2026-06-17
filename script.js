@@ -511,7 +511,6 @@ function createDiscographyServiceLinksHtml(item) {
           rel="noopener noreferrer"
         >
           <span>配信・購入はこちら</span>
-          <strong>開く</strong>
         </a>
       `
     : "";

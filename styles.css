@@ -1336,3 +1336,31 @@ h3 {
   color: var(--color-slate);
   font-size: 0.9rem;
 }
+
+/* Discography primary streaming link compact */
+.discography-service-link-primary {
+  justify-self: start;
+  width: min(100%, 360px);
+  min-height: 54px;
+  padding: 0 14px;
+}
+
+/* Discography primary streaming link single button */
+.discography-service-link-primary {
+  justify-self: start;
+  width: fit-content;
+  min-width: 220px;
+  min-height: 52px;
+  padding: 0 24px;
+  justify-content: center;
+}
+
+.discography-service-link-primary span {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+
+.discography-service-link-primary strong {
+  display: none;
+}
