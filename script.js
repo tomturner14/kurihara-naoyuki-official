@@ -749,12 +749,13 @@ function createNewsDetailHtml(item) {
 }
 
 
+
 function createScheduleCardHtml(item, isLatest = false) {
   const id = getManagedId(item);
   const date = escapeHtml(item["開催日"] || "");
+  const openTime = escapeHtml(item["開場時刻"] || item["開場"] || "");
   const startTime = escapeHtml(item["開始時刻"] || "");
   const endTime = escapeHtml(item["終了時刻"] || "");
-  const openTime = escapeHtml(item["開場時刻"] || item["開場"] || "");
   const title = escapeHtml(item["イベント名"] || "");
   const venue = escapeHtml(item["会場名"] || "");
   const area = escapeHtml(item["地域"] || "");
@@ -768,7 +769,20 @@ function createScheduleCardHtml(item, isLatest = false) {
     ? `schedule.html?id=${escapeAttribute(encodeURIComponent(id))}`
     : "";
 
-  const timeHtml = timeText ? `<p class="schedule-detail">${timeText}</p>` : "";
+  const timeParts = [];
+
+  if (openTime) {
+    timeParts.push(`開場：${openTime}`);
+  }
+
+  if (timeText) {
+    timeParts.push(`開演：${timeText}`);
+  }
+
+  const timeHtml = timeParts.length
+    ? `<p class="schedule-detail">${timeParts.join(" / ")}</p>`
+    : "";
+
   const placeHtml = placeText
     ? `<p class="schedule-detail">${escapeHtml(placeText)}</p>`
     : "";
@@ -808,6 +822,7 @@ function createScheduleCardHtml(item, isLatest = false) {
 
 function createScheduleDetailHtml(item) {
   const date = escapeHtml(item["開催日"] || "");
+  const openTime = escapeHtml(item["開場時刻"] || item["開場"] || "");
   const startTime = escapeHtml(item["開始時刻"] || "");
   const endTime = escapeHtml(item["終了時刻"] || "");
   const title = escapeHtml(item["イベント名"] || "");
@@ -828,7 +843,7 @@ function createScheduleDetailHtml(item) {
   const metaRows = [
     ["日程", date],
     ["開場", openTime],
-    ["時間", timeText],
+    ["開演", timeText],
     ["会場", placeText],
     ["住所", address],
     ["料金", price],
@@ -900,6 +915,7 @@ function createTextBlockHtml(text) {
 
   return `<div class="detail-text">${paragraphs}</div>`;
 }
+
 
 function createTimeText(startTime, endTime) {
   if (startTime && endTime) {
