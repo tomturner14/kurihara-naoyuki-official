@@ -1364,3 +1364,52 @@ h3 {
 .discography-service-link-primary strong {
   display: none;
 }
+
+/* Home page list scroll */
+.home-site-header + main .news-section .card-list,
+.home-site-header + main .schedule-section .card-list {
+  max-height: 460px;
+  overflow-y: auto;
+  padding-right: 10px;
+  scrollbar-gutter: stable;
+}
+
+.home-site-header + main .news-section .card-list {
+  max-height: 360px;
+}
+
+.home-site-header + main .schedule-section .card-list {
+  max-height: 520px;
+}
+
+.home-site-header + main .news-section .card-list::-webkit-scrollbar,
+.home-site-header + main .schedule-section .card-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.home-site-header + main .news-section .card-list::-webkit-scrollbar-track,
+.home-site-header + main .schedule-section .card-list::-webkit-scrollbar-track {
+  background: rgba(23, 32, 51, 0.06);
+  border-radius: 999px;
+}
+
+.home-site-header + main .news-section .card-list::-webkit-scrollbar-thumb,
+.home-site-header + main .schedule-section .card-list::-webkit-scrollbar-thumb {
+  background: rgba(23, 32, 51, 0.22);
+  border-radius: 999px;
+}
+
+.home-site-header + main .news-section .card-list::-webkit-scrollbar-thumb:hover,
+.home-site-header + main .schedule-section .card-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(23, 32, 51, 0.34);
+}
+
+@media (max-width: 760px) {
+  .home-site-header + main .news-section .card-list {
+    max-height: 340px;
+  }
+
+  .home-site-header + main .schedule-section .card-list {
+    max-height: 460px;
+  }
+}
