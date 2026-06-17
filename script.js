@@ -725,7 +725,7 @@ function createNewsDetailHtml(item) {
   const detailBodyHtml = createTextBlockHtml(detailBody);
   const imageHtml = imageUrl
     ? `
-      <figure class="detail-image">
+      <figure class="detail-image news-detail-image">
         <img src="${escapeAttribute(normalizeImageUrl(imageUrl))}" alt="${title}">
       </figure>
     `

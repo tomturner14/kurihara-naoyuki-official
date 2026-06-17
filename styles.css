@@ -1805,3 +1805,21 @@ h3 {
     font-size: 1rem;
   }
 }
+
+/* News detail flexible image layout */
+.news-section .detail-card {
+  grid-template-columns: 1fr;
+}
+
+.news-section .news-detail-image {
+  width: 100%;
+  margin: 0 0 clamp(24px, 4vw, 36px);
+}
+
+.news-section .news-detail-image img {
+  width: 100%;
+  height: auto;
+  max-height: min(64vh, 560px);
+  object-fit: contain;
+  background: rgba(23, 32, 51, 0.04);
+}
