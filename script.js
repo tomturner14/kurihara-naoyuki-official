@@ -759,6 +759,7 @@ function createScheduleCardHtml(item, isLatest = false) {
   const title = escapeHtml(item["イベント名"] || "");
   const venue = escapeHtml(item["会場名"] || "");
   const area = escapeHtml(item["地域"] || "");
+  const ticketPrice = formatTicketPrice(item["チケット料金"] || item["料金"] || "");
   const linkText = escapeHtml(item["リンク文字"] || "");
   const linkUrl = item["リンクURL"] || "";
 
@@ -787,6 +788,10 @@ function createScheduleCardHtml(item, isLatest = false) {
     ? `<p class="schedule-detail">${escapeHtml(placeText)}</p>`
     : "";
 
+  const ticketPriceHtml = ticketPrice
+    ? `<p class="schedule-detail">チケット：${escapeHtml(ticketPrice)}</p>`
+    : "";
+
   if (detailUrl) {
     return `
       <a class="card card-clickable" href="${detailUrl}" aria-label="${title}の詳細を見る">
@@ -797,6 +802,7 @@ function createScheduleCardHtml(item, isLatest = false) {
         <h3>${title}</h3>
         ${timeHtml}
         ${placeHtml}
+        ${ticketPriceHtml}
       </a>
     `;
   }
@@ -815,6 +821,7 @@ function createScheduleCardHtml(item, isLatest = false) {
       <h3>${title}</h3>
       ${timeHtml}
       ${placeHtml}
+      ${ticketPriceHtml}
       ${linkHtml}
     </article>
   `;
@@ -829,7 +836,7 @@ function createScheduleDetailHtml(item) {
   const venue = escapeHtml(item["会場名"] || "");
   const area = escapeHtml(item["地域"] || "");
   const address = escapeHtml(item["住所"] || "");
-  const price = escapeHtml(item["料金"] || "");
+  const price = formatTicketPrice(item["チケット料金"] || item["料金"] || "");
   const performers = escapeHtml(item["出演者"] || item["出演"] || "");
   const detail = item["詳細"] || "";
   const detailBody = item["詳細本文"] || "";
@@ -846,7 +853,7 @@ function createScheduleDetailHtml(item) {
     ["開演", timeText],
     ["会場", placeText],
     ["住所", address],
-    ["料金", price],
+    ["チケット", price],
     ["出演", performers],
   ]
     .filter(([, value]) => value)
@@ -874,7 +881,7 @@ function createScheduleDetailHtml(item) {
 
   const linkHtml =
     linkText && linkUrl
-      ? `<p class="card-link detail-main-link"><a href="${escapeAttribute(linkUrl)}" target="_blank" rel="noopener noreferrer">${linkText}</a></p>`
+      ? `<p class="card-link detail-main-link ticket-link"><a href="${escapeAttribute(linkUrl)}" target="_blank" rel="noopener noreferrer">${linkText}</a></p>`
       : "";
 
   return `
@@ -916,6 +923,27 @@ function createTextBlockHtml(text) {
   return `<div class="detail-text">${paragraphs}</div>`;
 }
 
+
+
+function formatTicketPrice(value) {
+  const rawValue = String(value || "").trim();
+
+  if (!rawValue) {
+    return "";
+  }
+
+  const normalizedNumber = rawValue
+    .replace(/[０-９]/g, (char) =>
+      String.fromCharCode(char.charCodeAt(0) - 0xfee0),
+    )
+    .replace(/[,\s，円¥￥]/g, "");
+
+  if (/^\d+$/.test(normalizedNumber)) {
+    return `${Number(normalizedNumber).toLocaleString("ja-JP")}円`;
+  }
+
+  return rawValue;
+}
 
 function createTimeText(startTime, endTime) {
   if (startTime && endTime) {

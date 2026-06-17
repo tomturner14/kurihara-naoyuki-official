@@ -1659,3 +1659,38 @@ h3 {
 .card.card-clickable:focus-visible h3 {
   color: var(--color-ink);
 }
+
+.ticket-link {
+  margin-top: 18px;
+}
+
+.ticket-link a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 24px;
+  border: 1px solid rgba(47, 128, 237, 0.34);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2f80ed, #5a9cf8);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  box-shadow: 0 18px 34px rgba(47, 128, 237, 0.28);
+}
+
+.ticket-link a::after {
+  content: "↗";
+  margin-left: 10px;
+  font-size: 0.9em;
+}
+
+.ticket-link a:hover,
+.ticket-link a:focus-visible {
+  background: linear-gradient(135deg, #1f6ed6, #4c8feb);
+  box-shadow: 0 22px 42px rgba(47, 128, 237, 0.34);
+  transform: translateY(-1px);
+}
+
