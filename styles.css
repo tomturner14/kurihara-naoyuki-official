@@ -1908,3 +1908,21 @@ h3 {
     margin-inline: auto;
   }
 }
+
+/* Discography detail mobile cover center override */
+@media (max-width: 760px) {
+  .discography-detail-cover {
+    width: min(100%, 320px);
+    max-width: 320px;
+    margin-inline: auto;
+    justify-self: center;
+  }
+
+  .discography-detail-cover img,
+  .discography-detail-cover .discography-no-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
