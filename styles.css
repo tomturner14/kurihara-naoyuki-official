@@ -442,6 +442,12 @@ h3 {
 
 .page-header {
   min-height: 480px;
+  color: #ffffff;
+  background: #030e20;
+}
+
+.page-header::after {
+  display: none;
 }
 
 .page-header-inner {
@@ -449,7 +455,16 @@ h3 {
 }
 
 .page-header h1 {
+  color: #ffffff;
   font-size: clamp(4rem, 10vw, 7.5rem);
+}
+
+.page-header .hero-subtitle {
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.page-header .lead {
+  color: rgba(255, 255, 255, 0.86);
 }
 
 @media (max-width: 760px) {
