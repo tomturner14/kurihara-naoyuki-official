@@ -771,8 +771,11 @@ h3 {
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(232, 236, 242, 0.78));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.94),
+    rgba(232, 236, 242, 0.78)
+  );
 }
 
 .discography-card-body {
@@ -1088,7 +1091,6 @@ h3 {
   text-decoration: none;
 }
 
-
 /* Back to top */
 .back-to-top {
   position: fixed;
@@ -1399,8 +1401,14 @@ h3 {
   border-radius: 999px;
 }
 
-.home-site-header + main .news-section .card-list::-webkit-scrollbar-thumb:hover,
-.home-site-header + main .schedule-section .card-list::-webkit-scrollbar-thumb:hover {
+.home-site-header
+  + main
+  .news-section
+  .card-list::-webkit-scrollbar-thumb:hover,
+.home-site-header
+  + main
+  .schedule-section
+  .card-list::-webkit-scrollbar-thumb:hover {
   background: rgba(23, 32, 51, 0.34);
 }
 
@@ -1421,7 +1429,7 @@ h3 {
   }
 
   .site-header.page-header .header-inner.page-header-inner {
-    min-height: 260px !important;
+    min-height: 220px !important;
     padding-top: 28px;
     padding-bottom: 28px;
   }
@@ -1459,7 +1467,7 @@ h3 {
 
 @media (max-width: 420px) {
   .site-header.page-header .header-inner.page-header-inner {
-    min-height: 235px !important;
+    min-height: 210px !important;
     padding-top: 24px;
     padding-bottom: 24px;
   }
