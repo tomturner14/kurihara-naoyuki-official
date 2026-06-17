@@ -831,7 +831,7 @@ h3 {
 .discography-service-list {
   display: grid;
   gap: 10px;
-  max-width: 520px;
+  max-width: 680px;
 }
 
 .discography-service-link {
@@ -885,4 +885,71 @@ h3 {
     align-items: flex-start;
     flex-direction: column;
   }
+}
+
+/* Profile page */
+.profile-page-layout {
+  display: grid;
+  grid-template-columns: minmax(440px, 680px) minmax(280px, 460px);
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+}
+
+.profile-photo {
+  justify-self: end;
+  margin: 0;
+  width: min(100%, 460px);
+}
+
+.profile-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.profile-page-copy {
+  display: grid;
+  max-width: 520px;
+  gap: 24px;
+  align-content: center;
+}
+
+.profile-page-copy .profile-content {
+  display: grid;
+  gap: 18px;
+}
+
+@media (max-width: 760px) {
+  .profile-page-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-photo {
+    justify-self: start;
+    width: min(100%, 420px);
+  }
+}
+
+.profile-static-content {
+  display: grid;
+  gap: 18px;
+}
+
+.profile-name {
+  margin: 0 0 8px;
+  color: var(--color-ink);
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  line-height: 1.05;
+  letter-spacing: 0.08em;
+}
+
+.profile-text {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 1rem;
+  line-height: 2;
+  letter-spacing: 0.02em;
 }
