@@ -689,7 +689,7 @@ h3 {
 
 /* Discography */
 .discography-section {
-  background: #f4f5f6;
+  background: #e0e0e0eb;
 }
 
 .discography-filter {
@@ -1411,5 +1411,24 @@ h3 {
 
   .home-site-header + main .schedule-section .card-list {
     max-height: 460px;
+  }
+}
+
+/* Page header mobile title adjustment */
+.page-header h1 {
+  max-width: 100%;
+}
+
+@media (max-width: 760px) {
+  .page-header h1 {
+    font-size: clamp(2.8rem, 12vw, 4.2rem);
+    letter-spacing: 0.02em;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 420px) {
+  .page-header h1 {
+    font-size: clamp(2.35rem, 10.5vw, 3.25rem);
   }
 }
