@@ -257,12 +257,9 @@ h3 {
   line-height: 1.4;
 }
 
-.news-section {
-  background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
-}
-
+.news-section,
 .schedule-section {
-  background: linear-gradient(180deg, #eef5ff 0%, #f7fbff 100%);
+  background: #e0e0e0eb;
 }
 
 .profile-section {
@@ -277,6 +274,11 @@ h3 {
 
 .contact-section {
   background: #f8fafc;
+}
+
+.home-site-header + main .profile-section,
+.home-site-header + main .contact-section {
+  background: #e0e0e0eb;
 }
 
 .card-list {
@@ -461,7 +463,6 @@ h3 {
   }
 }
 
-
 .site-footer .container {
   display: grid;
   justify-items: center;
@@ -481,8 +482,6 @@ h3 {
     width: 72px;
   }
 }
-
-
 
 .nav-logo-image {
   width: 34px;
@@ -553,14 +552,13 @@ h3 {
   width: min(20vw, 400px);
   margin: 0;
   overflow: hidden;
-  background:
-    linear-gradient(
-      90deg,
-      #050b18 0%,
-      #06183a 40%,
-      #071f55 68%,
-      #020713 100%
-    );
+  background: linear-gradient(
+    90deg,
+    #050b18 0%,
+    #06183a 40%,
+    #071f55 68%,
+    #020713 100%
+  );
 }
 
 .hero-portrait::before {
@@ -660,12 +658,11 @@ h3 {
   }
 
   .hero-portrait::before {
-    background:
-      linear-gradient(
-        180deg,
-        rgba(5, 11, 24, 0.04) 0%,
-        rgba(5, 11, 24, 0.18) 100%
-      );
+    background: linear-gradient(
+      180deg,
+      rgba(5, 11, 24, 0.04) 0%,
+      rgba(5, 11, 24, 0.18) 100%
+    );
   }
 
   .hero-portrait img {
