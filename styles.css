@@ -1476,3 +1476,19 @@ h3 {
     font-size: clamp(2.65rem, 13vw, 3.55rem);
   }
 }
+
+/* New badge */
+.new-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: #f3b744;
+  color: #07101f;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}

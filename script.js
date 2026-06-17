@@ -230,7 +230,9 @@ function renderNews(newsItems, container) {
     return;
   }
 
-  container.innerHTML = newsItems.map(createNewsCardHtml).join("");
+  container.innerHTML = newsItems
+    .map((item, index) => createNewsCardHtml(item, index === 0))
+    .join("");
 }
 
 function renderSchedule(scheduleItems, container) {
@@ -240,7 +242,9 @@ function renderSchedule(scheduleItems, container) {
     return;
   }
 
-  container.innerHTML = scheduleItems.map(createScheduleCardHtml).join("");
+  container.innerHTML = scheduleItems
+    .map((item, index) => createScheduleCardHtml(item, index === 0))
+    .join("");
 }
 
 function renderContact(contactItems, container) {
@@ -599,7 +603,7 @@ function createContactBlockHtml(item) {
   `;
 }
 
-function createNewsCardHtml(item) {
+function createNewsCardHtml(item, isLatest = false) {
   const date = escapeHtml(item["公開日"] || "");
   const category = escapeHtml(item["種別"] || "");
   const title = escapeHtml(item["タイトル"] || "");
@@ -608,6 +612,7 @@ function createNewsCardHtml(item) {
   const linkUrl = item["リンクURL"] || "";
 
   const categoryHtml = category ? `<span class="tag">${category}</span>` : "";
+  const latestBadgeHtml = isLatest ? '<span class="new-badge">NEW</span>' : "";
 
   const linkHtml =
     linkText && linkUrl
@@ -619,6 +624,7 @@ function createNewsCardHtml(item) {
       <div class="card-meta">
         <p class="date">${date}</p>
         ${categoryHtml}
+        ${latestBadgeHtml}
       </div>
       <h3>${title}</h3>
       <p>${body}</p>
@@ -627,7 +633,7 @@ function createNewsCardHtml(item) {
   `;
 }
 
-function createScheduleCardHtml(item) {
+function createScheduleCardHtml(item, isLatest = false) {
   const date = escapeHtml(item["開催日"] || "");
   const startTime = escapeHtml(item["開始時刻"] || "");
   const endTime = escapeHtml(item["終了時刻"] || "");
@@ -638,6 +644,7 @@ function createScheduleCardHtml(item) {
   const linkText = escapeHtml(item["リンク文字"] || "");
   const linkUrl = item["リンクURL"] || "";
 
+  const latestBadgeHtml = isLatest ? '<span class="new-badge">NEW</span>' : "";
   const timeText = createTimeText(startTime, endTime);
   const placeText = [venue, area].filter(Boolean).join(" / ");
 
@@ -654,7 +661,10 @@ function createScheduleCardHtml(item) {
 
   return `
     <article class="card">
-      <p class="date">${date}</p>
+      <div class="card-meta">
+        <p class="date">${date}</p>
+        ${latestBadgeHtml}
+      </div>
       <h3>${title}</h3>
       ${timeHtml}
       ${placeHtml}
