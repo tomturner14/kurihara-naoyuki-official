@@ -754,10 +754,10 @@ function createScheduleCardHtml(item, isLatest = false) {
   const date = escapeHtml(item["開催日"] || "");
   const startTime = escapeHtml(item["開始時刻"] || "");
   const endTime = escapeHtml(item["終了時刻"] || "");
+  const openTime = escapeHtml(item["開場時刻"] || item["開場"] || "");
   const title = escapeHtml(item["イベント名"] || "");
   const venue = escapeHtml(item["会場名"] || "");
   const area = escapeHtml(item["地域"] || "");
-  const detail = escapeHtml(item["詳細"] || "");
   const linkText = escapeHtml(item["リンク文字"] || "");
   const linkUrl = item["リンクURL"] || "";
 
@@ -772,7 +772,6 @@ function createScheduleCardHtml(item, isLatest = false) {
   const placeHtml = placeText
     ? `<p class="schedule-detail">${escapeHtml(placeText)}</p>`
     : "";
-  const detailHtml = detail ? `<p>${detail}</p>` : "";
 
   if (detailUrl) {
     return `
@@ -784,7 +783,6 @@ function createScheduleCardHtml(item, isLatest = false) {
         <h3>${title}</h3>
         ${timeHtml}
         ${placeHtml}
-        ${detailHtml}
       </a>
     `;
   }
@@ -803,7 +801,6 @@ function createScheduleCardHtml(item, isLatest = false) {
       <h3>${title}</h3>
       ${timeHtml}
       ${placeHtml}
-      ${detailHtml}
       ${linkHtml}
     </article>
   `;
@@ -830,6 +827,7 @@ function createScheduleDetailHtml(item) {
 
   const metaRows = [
     ["日程", date],
+    ["開場", openTime],
     ["時間", timeText],
     ["会場", placeText],
     ["住所", address],
