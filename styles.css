@@ -1291,3 +1291,48 @@ h3 {
     align-items: stretch;
   }
 }
+
+/* Discography track list */
+.discography-tracklist {
+  margin-top: 18px;
+  padding: 18px 0 4px;
+  border-top: 1px solid rgba(23, 32, 51, 0.1);
+}
+
+.discography-tracklist h3 {
+  margin: 0 0 14px;
+  color: var(--color-ink);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.discography-tracklist ol {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 1.35rem;
+}
+
+.discography-tracklist li {
+  padding-left: 6px;
+  color: var(--color-slate);
+  line-height: 1.7;
+}
+
+.discography-tracklist li::marker {
+  color: var(--color-blue);
+  font-weight: 800;
+}
+
+.discography-track-title {
+  color: var(--color-ink);
+  font-weight: 800;
+}
+
+.discography-track-time {
+  display: inline-block;
+  margin-left: 10px;
+  color: var(--color-slate);
+  font-size: 0.9rem;
+}

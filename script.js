@@ -53,7 +53,8 @@ async function loadProfile() {
     renderProfile(publicProfiles, profileContent);
   } catch (error) {
     console.error(error);
-    profileContent.innerHTML = '<p class="muted">プロフィールを読み込めませんでした。</p>';
+    profileContent.innerHTML =
+      '<p class="muted">プロフィールを読み込めませんでした。</p>';
   }
 }
 
@@ -74,7 +75,8 @@ async function loadNews() {
     renderNews(publicNews, newsList);
   } catch (error) {
     console.error(error);
-    newsList.innerHTML = '<p class="muted">お知らせを読み込めませんでした。</p>';
+    newsList.innerHTML =
+      '<p class="muted">お知らせを読み込めませんでした。</p>';
   }
 }
 
@@ -95,7 +97,8 @@ async function loadSchedule() {
     renderSchedule(publicSchedules, scheduleList);
   } catch (error) {
     console.error(error);
-    scheduleList.innerHTML = '<p class="muted">出演情報を読み込めませんでした。</p>';
+    scheduleList.innerHTML =
+      '<p class="muted">出演情報を読み込めませんでした。</p>';
   }
 }
 
@@ -116,7 +119,8 @@ async function loadContact() {
     renderContact(publicContacts, contactContent);
   } catch (error) {
     console.error(error);
-    contactContent.innerHTML = '<p class="muted">お問い合わせ情報を読み込めませんでした。</p>';
+    contactContent.innerHTML =
+      '<p class="muted">お問い合わせ情報を読み込めませんでした。</p>';
   }
 }
 
@@ -131,7 +135,9 @@ async function loadDiscography() {
     const rows = await fetchCsvObjects(DISCOGRAPHY_CSV_URL);
 
     const publicDiscographyItems = rows
-      .filter((row) => isChecked(row["表示する"]) && row["ID"] && row["タイトル"])
+      .filter(
+        (row) => isChecked(row["表示する"]) && row["ID"] && row["タイトル"],
+      )
       .sort(compareDiscographyItems);
 
     renderDiscography(publicDiscographyItems, discographyContent);
@@ -219,7 +225,8 @@ function renderProfile(profileItems, container) {
 
 function renderNews(newsItems, container) {
   if (newsItems.length === 0) {
-    container.innerHTML = '<p class="muted">現在、掲載中のお知らせはありません。</p>';
+    container.innerHTML =
+      '<p class="muted">現在、掲載中のお知らせはありません。</p>';
     return;
   }
 
@@ -228,7 +235,8 @@ function renderNews(newsItems, container) {
 
 function renderSchedule(scheduleItems, container) {
   if (scheduleItems.length === 0) {
-    container.innerHTML = '<p class="muted">現在、掲載中の出演情報はありません。</p>';
+    container.innerHTML =
+      '<p class="muted">現在、掲載中の出演情報はありません。</p>';
     return;
   }
 
@@ -237,7 +245,8 @@ function renderSchedule(scheduleItems, container) {
 
 function renderContact(contactItems, container) {
   if (contactItems.length === 0) {
-    container.innerHTML = '<p class="muted">お問い合わせ情報は現在準備中です。</p>';
+    container.innerHTML =
+      '<p class="muted">お問い合わせ情報は現在準備中です。</p>';
     return;
   }
 
@@ -246,7 +255,8 @@ function renderContact(contactItems, container) {
 
 function renderDiscography(discographyItems, container) {
   if (discographyItems.length === 0) {
-    container.innerHTML = '<p class="muted">現在、掲載中の作品はありません。</p>';
+    container.innerHTML =
+      '<p class="muted">現在、掲載中の作品はありません。</p>';
     return;
   }
 
@@ -285,7 +295,9 @@ function renderDiscographyList(discographyItems, container, currentGenre) {
 }
 
 function renderDiscographyDetail(discographyItems, container, detailId) {
-  const item = discographyItems.find((discographyItem) => discographyItem["ID"] === detailId);
+  const item = discographyItems.find(
+    (discographyItem) => discographyItem["ID"] === detailId,
+  );
 
   if (!item) {
     container.innerHTML = `
@@ -313,7 +325,7 @@ function createDiscographyFilterHtml(genres, selectedGenre) {
     .map((genre) => {
       const activeClass = genre === selectedGenre ? " is-active" : "";
       return `<a class="discography-filter-link${activeClass}" href="discography.html?genre=${encodeURIComponent(
-        genre
+        genre,
       )}">${escapeHtml(genre)}</a>`;
     })
     .join("");
@@ -337,7 +349,9 @@ function createDiscographyCardHtml(item) {
   const englishTitleHtml = englishTitle
     ? `<p class="discography-card-subtitle">${englishTitle}</p>`
     : "";
-  const genreHtml = genre ? `<p class="discography-card-meta">${genre}</p>` : "";
+  const genreHtml = genre
+    ? `<p class="discography-card-meta">${genre}</p>`
+    : "";
   const releaseDateHtml = releaseDate
     ? `<p class="discography-card-date">${releaseDate}</p>`
     : "";
@@ -369,8 +383,11 @@ function createDiscographyDetailHtml(item) {
     ? `<p class="discography-detail-subtitle">${englishTitle}</p>`
     : "";
   const genreHtml = genre ? `<span class="tag">${genre}</span>` : "";
-  const releaseDateHtml = releaseDate ? `<p class="date">${releaseDate}</p>` : "";
+  const releaseDateHtml = releaseDate
+    ? `<p class="date">${releaseDate}</p>`
+    : "";
   const descriptionHtml = description ? `<p>${description}</p>` : "";
+  const trackListHtml = createDiscographyTrackListHtml(item);
   const serviceLinksHtml = createDiscographyServiceLinksHtml(item);
 
   return `
@@ -389,6 +406,7 @@ function createDiscographyDetailHtml(item) {
         <h2>${title}</h2>
         ${englishTitleHtml}
         ${descriptionHtml}
+        ${trackListHtml}
         ${serviceLinksHtml}
       </div>
     </article>
@@ -428,7 +446,76 @@ function normalizeImageUrl(url) {
   return `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w800`;
 }
 
+function createDiscographyTrackListHtml(item) {
+  const rawTrackList = String(
+    item["トラックリスト"] || item["収録曲"] || item["Tracks"] || "",
+  ).trim();
+
+  if (!rawTrackList) {
+    return "";
+  }
+
+  const tracks = rawTrackList
+    .split(/\r?\n/)
+    .map((track) => track.trim())
+    .filter(Boolean);
+
+  if (tracks.length === 0) {
+    return "";
+  }
+
+  const trackItemsHtml = tracks
+    .map((track) => {
+      const normalizedTrack = track.replace(/^\d+[\.．、\)）\-\s]+/, "");
+      const [title, time] = normalizedTrack
+        .split(/\s*[|｜]\s*/)
+        .map((value) => value.trim());
+
+      const timeHtml = time
+        ? `<span class="discography-track-time">${escapeHtml(time)}</span>`
+        : "";
+
+      return `
+        <li>
+          <span class="discography-track-title">${escapeHtml(title)}</span>
+          ${timeHtml}
+        </li>
+      `;
+    })
+    .join("");
+
+  return `
+    <section class="discography-tracklist" aria-label="トラックリスト">
+      <h3>- TrackList -</h3>
+      <ol>
+        ${trackItemsHtml}
+      </ol>
+    </section>
+  `;
+}
+
 function createDiscographyServiceLinksHtml(item) {
+  const summaryLinkUrl = String(
+    item["配信まとめURL"] ||
+      item["配信・購入URL"] ||
+      item["スマートリンクURL"] ||
+      "",
+  ).trim();
+
+  const summaryLinkHtml = summaryLinkUrl
+    ? `
+        <a
+          class="discography-service-link discography-service-link-primary"
+          href="${escapeAttribute(summaryLinkUrl)}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>配信・購入はこちら</span>
+          <strong>開く</strong>
+        </a>
+      `
+    : "";
+
   const services = [
     ["Apple Music", item["Apple Music URL"], "聴く"],
     ["Spotify", item["Spotify URL"], "聴く"],
@@ -445,19 +532,21 @@ function createDiscographyServiceLinksHtml(item) {
     services.push([otherLinkName, otherLinkUrl, "開く"]);
   }
 
-  const links = services
+  const serviceLinksHtml = services
     .filter(([, url]) => url)
     .map(
       ([name, url, actionText]) => `
         <a class="discography-service-link" href="${escapeAttribute(
-          url
+          url,
         )}" target="_blank" rel="noopener noreferrer">
           <span>${escapeHtml(name)}</span>
           <strong>${escapeHtml(actionText)}</strong>
         </a>
-      `
+      `,
     )
     .join("");
+
+  const links = [summaryLinkHtml, serviceLinksHtml].filter(Boolean).join("");
 
   if (!links) {
     return '<p class="muted">配信リンクは現在準備中です。</p>';
@@ -554,7 +643,9 @@ function createScheduleCardHtml(item) {
   const placeText = [venue, area].filter(Boolean).join(" / ");
 
   const timeHtml = timeText ? `<p class="schedule-detail">${timeText}</p>` : "";
-  const placeHtml = placeText ? `<p class="schedule-detail">${escapeHtml(placeText)}</p>` : "";
+  const placeHtml = placeText
+    ? `<p class="schedule-detail">${escapeHtml(placeText)}</p>`
+    : "";
   const detailHtml = detail ? `<p>${detail}</p>` : "";
 
   const linkHtml =
@@ -657,7 +748,9 @@ function parseCsv(csvText) {
     rows.push(row);
   }
 
-  return rows.filter((currentRow) => currentRow.some((cell) => cell.trim() !== ""));
+  return rows.filter((currentRow) =>
+    currentRow.some((cell) => cell.trim() !== ""),
+  );
 }
 
 function isChecked(value) {
@@ -699,7 +792,10 @@ function compareDiscographyItems(a, b) {
     return 1;
   }
 
-  return String(a["タイトル"] || "").localeCompare(String(b["タイトル"] || ""), "ja");
+  return String(a["タイトル"] || "").localeCompare(
+    String(b["タイトル"] || ""),
+    "ja",
+  );
 }
 
 // 並び順ルール:
