@@ -1694,3 +1694,27 @@ h3 {
   transform: translateY(-1px);
 }
 
+
+/* Discography detail mobile title adjustment */
+@media (max-width: 760px) {
+  .discography-section .detail-card-body h2,
+  .discography-section .discography-detail h2,
+  .discography-section .discography-detail-title {
+    font-size: clamp(2.1rem, 10vw, 3rem);
+    line-height: 1.12;
+    letter-spacing: 0.02em;
+  }
+
+  .discography-section .detail-card-body .date,
+  .discography-section .discography-detail .date {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .discography-section .detail-card-body h2,
+  .discography-section .discography-detail h2,
+  .discography-section .discography-detail-title {
+    font-size: clamp(1.9rem, 9vw, 2.55rem);
+  }
+}
