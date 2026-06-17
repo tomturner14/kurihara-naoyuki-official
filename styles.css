@@ -1718,3 +1718,25 @@ h3 {
     font-size: clamp(1.9rem, 9vw, 2.55rem);
   }
 }
+
+/* Discography streaming button adjustment */
+.discography-service-list {
+  align-items: flex-start;
+}
+
+.discography-service-link {
+  width: fit-content;
+  max-width: 100%;
+  justify-content: center;
+  gap: 10px;
+  padding-inline: 22px;
+}
+
+@media (max-width: 760px) {
+  .discography-service-link {
+    width: fit-content;
+    min-width: 0;
+    max-width: 100%;
+    padding-inline: 20px;
+  }
+}
