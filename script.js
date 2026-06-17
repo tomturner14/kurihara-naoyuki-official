@@ -258,7 +258,7 @@ function renderNewsDetail(newsItems, container, detailId) {
   if (!item) {
     container.innerHTML = `
       <p class="muted">指定されたお知らせが見つかりませんでした。</p>
-      <p class="card-link"><a href="news.html">一覧に戻る</a></p>
+      <p class="detail-back-link"><a class="back-link" href="news.html">Back to News</a></p>
     `;
     return;
   }
@@ -295,7 +295,7 @@ function renderScheduleDetail(scheduleItems, container, detailId) {
   if (!item) {
     container.innerHTML = `
       <p class="muted">指定された出演情報が見つかりませんでした。</p>
-      <p class="card-link"><a href="schedule.html">一覧に戻る</a></p>
+      <p class="detail-back-link"><a class="back-link" href="schedule.html">Back to Schedule</a></p>
     `;
     return;
   }
@@ -362,7 +362,7 @@ function renderDiscographyDetail(discographyItems, container, detailId) {
   if (!item) {
     container.innerHTML = `
       <p class="muted">指定された作品が見つかりませんでした。</p>
-      <p class="card-link"><a href="discography.html">一覧に戻る</a></p>
+      <p class="detail-back-link"><a class="back-link" href="discography.html">Back to Discography</a></p>
     `;
     return;
   }
@@ -451,7 +451,7 @@ function createDiscographyDetailHtml(item) {
   const serviceLinksHtml = createDiscographyServiceLinksHtml(item);
 
   return `
-    <p class="card-link discography-back-link"><a href="discography.html">一覧に戻る</a></p>
+    <p class="detail-back-link"><a class="back-link" href="discography.html">Back to Discography</a></p>
 
     <article class="discography-detail">
       <div class="discography-detail-cover">
@@ -736,7 +736,7 @@ function createNewsDetailHtml(item) {
       : "";
 
   return `
-    <p class="card-link detail-back-link"><a href="news.html">一覧に戻る</a></p>
+    <p class="detail-back-link"><a class="back-link" href="news.html">Back to News</a></p>
 
     <article class="detail-card">
       ${imageHtml}
@@ -924,7 +924,7 @@ function createScheduleDetailHtml(item) {
       : "";
 
   return `
-    <p class="card-link detail-back-link"><a href="schedule.html">一覧に戻る</a></p>
+    <p class="detail-back-link"><a class="back-link" href="schedule.html">Back to Schedule</a></p>
 
     <article class="detail-card">
       ${imageHtml}

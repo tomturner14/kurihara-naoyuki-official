@@ -1645,6 +1645,14 @@ h3 {
   transform: translateY(-1px);
 }
 
+/* Discography detail desktop title adjustment */
+.discography-section .detail-card-body h2,
+.discography-section .discography-detail h2,
+.discography-section .discography-detail-title {
+  font-size: clamp(1.95rem, 3vw, 3rem);
+  line-height: 1.12;
+  letter-spacing: 0.02em;
+}
 
 /* Discography detail mobile title adjustment */
 @media (max-width: 760px) {
@@ -1822,4 +1830,59 @@ h3 {
   max-height: min(64vh, 560px);
   object-fit: contain;
   background: rgba(23, 32, 51, 0.04);
+}
+
+/* Common detail back link */
+.detail-back-link {
+  width: min(100% - 32px, 960px);
+  margin: 0 auto 22px;
+}
+
+.detail-back-link .back-link,
+.detail-back-link > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 0 6px;
+  border: 0;
+  border-bottom: 2px solid rgba(47, 128, 237, 0.32);
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-blue);
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  box-shadow: none;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.detail-back-link .back-link::before,
+.detail-back-link > a::before {
+  content: "←";
+  font-size: 0.95em;
+}
+
+.detail-back-link .back-link:hover,
+.detail-back-link .back-link:focus-visible,
+.detail-back-link > a:hover,
+.detail-back-link > a:focus-visible {
+  color: #1f6ed6;
+  border-color: rgba(47, 128, 237, 0.72);
+  transform: translateX(-2px);
+}
+
+@media (max-width: 760px) {
+  .detail-back-link {
+    margin-bottom: 18px;
+  }
+
+  .detail-back-link .back-link,
+  .detail-back-link > a {
+    font-size: 0.88rem;
+  }
 }
