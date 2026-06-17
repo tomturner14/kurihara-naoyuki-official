@@ -827,41 +827,68 @@ function createScheduleCardHtml(item, isLatest = false) {
   `;
 }
 
+
+
 function createScheduleDetailHtml(item) {
-  const date = escapeHtml(item["開催日"] || "");
-  const openTime = escapeHtml(item["開場時刻"] || item["開場"] || "");
-  const startTime = escapeHtml(item["開始時刻"] || "");
-  const endTime = escapeHtml(item["終了時刻"] || "");
-  const title = escapeHtml(item["イベント名"] || "");
-  const venue = escapeHtml(item["会場名"] || "");
-  const area = escapeHtml(item["地域"] || "");
-  const address = escapeHtml(item["住所"] || "");
+  const date = item["開催日"] || "";
+  const openTime = item["開場時刻"] || item["開場"] || "";
+  const startTime = item["開始時刻"] || "";
+  const endTime = item["終了時刻"] || "";
+  const title = item["イベント名"] || "";
+  const venue = item["会場名"] || "";
+  const area = item["地域"] || "";
+  const address = item["住所"] || "";
   const price = formatTicketPrice(item["チケット料金"] || item["料金"] || "");
-  const performers = escapeHtml(item["出演者"] || item["出演"] || "");
+  const performers = item["出演者"] || item["出演"] || "";
   const detail = item["詳細"] || "";
   const detailBody = item["詳細本文"] || "";
-  const flyerUrl = item["フライヤー画像URL"] || item["画像URL"] || "";
-  const linkText = escapeHtml(item["リンク文字"] || "");
-  const linkUrl = item["リンクURL"] || "";
+
+  const imageUrl =
+    item["イメージ画像URL"] ||
+    item["イベント画像URL"] ||
+    item["画像URL"] ||
+    item["フライヤー画像URL"] ||
+    "";
+
+  const ticketLinkUrl = item["リンクURL"] || "";
+  const ticketLinkText = item["リンク文字"] || "チケットはこちら";
+
+  const eventSiteUrl =
+    item["イベントHP URL"] ||
+    item["イベントHPURL"] ||
+    item["イベントURL"] ||
+    item["イベントページURL"] ||
+    "";
+
+  const eventSiteText =
+    item["イベントHPリンク文字"] ||
+    item["イベントリンク文字"] ||
+    "";
 
   const timeText = createTimeText(startTime, endTime);
   const placeText = [venue, area].filter(Boolean).join(" / ");
 
+  const eventSiteInfoHtml =
+    eventSiteUrl && eventSiteText
+      ? `<a class="detail-info-link" href="${escapeAttribute(eventSiteUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(eventSiteText)}</a>`
+      : "";
+
   const metaRows = [
-    ["日程", date],
-    ["開場", openTime],
-    ["開演", timeText],
-    ["会場", placeText],
-    ["住所", address],
-    ["チケット", price],
-    ["出演", performers],
+    { label: "日程", value: date },
+    { label: "開場", value: openTime },
+    { label: "開演", value: timeText },
+    { label: "会場", value: placeText },
+    { label: "住所", value: address },
+    { label: "チケット", value: price },
+    { label: "出演", value: performers },
+    { label: "イベントHP", html: eventSiteInfoHtml },
   ]
-    .filter(([, value]) => value)
+    .filter((row) => row.value || row.html)
     .map(
-      ([label, value]) => `
+      (row) => `
         <div class="detail-info-row">
-          <dt>${escapeHtml(label)}</dt>
-          <dd>${escapeHtml(value)}</dd>
+          <dt>${escapeHtml(row.label)}</dt>
+          <dd>${row.html || escapeHtml(row.value)}</dd>
         </div>
       `,
     )
@@ -871,36 +898,41 @@ function createScheduleDetailHtml(item) {
   const detailHtml = createTextBlockHtml(detail);
   const detailBodyHtml = createTextBlockHtml(detailBody);
 
-  const flyerHtml = flyerUrl
+  const imageHtml = imageUrl
     ? `
-      <figure class="detail-image">
-        <img src="${escapeAttribute(normalizeImageUrl(flyerUrl))}" alt="${title}のフライヤー画像">
+      <figure class="detail-image schedule-detail-image">
+        <img src="${escapeAttribute(normalizeImageUrl(imageUrl))}" alt="${escapeAttribute(title)}のイメージ画像">
       </figure>
     `
     : "";
 
-  const linkHtml =
-    linkText && linkUrl
-      ? `<p class="card-link detail-main-link ticket-link"><a href="${escapeAttribute(linkUrl)}" target="_blank" rel="noopener noreferrer">${linkText}</a></p>`
+  const ticketLinkHtml =
+    ticketLinkUrl && ticketLinkText
+      ? `
+        <div class="detail-action-links">
+          <a class="ticket-button" href="${escapeAttribute(ticketLinkUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(ticketLinkText)}</a>
+        </div>
+      `
       : "";
 
   return `
     <p class="card-link detail-back-link"><a href="schedule.html">一覧に戻る</a></p>
 
     <article class="detail-card">
-      ${flyerHtml}
+      ${imageHtml}
 
       <div class="detail-card-body">
-        <p class="date">${date}</p>
-        <h2>${title}</h2>
+        <p class="date">${escapeHtml(date)}</p>
+        <h2>${escapeHtml(title)}</h2>
         ${infoHtml}
         ${detailHtml}
         ${detailBodyHtml}
-        ${linkHtml}
+        ${ticketLinkHtml}
       </div>
     </article>
   `;
 }
+
 
 function getManagedId(item) {
   return String(item["管理ID"] || item["ID"] || "").trim();
