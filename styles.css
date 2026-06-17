@@ -274,6 +274,12 @@ h3 {
   background: #e0e0e0eb;
 }
 
+.home-site-header + main .news-section,
+.home-site-header + main .schedule-section {
+  padding-top: clamp(52px, 6vw, 80px);
+  padding-bottom: clamp(52px, 6vw, 80px);
+}
+
 .card-list {
   display: grid;
   gap: 18px;
