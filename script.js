@@ -72,7 +72,11 @@ async function loadNews() {
       .filter((row) => isChecked(row["表示する"]))
       .sort(compareNewsItems);
 
-    renderNews(publicNews, newsList);
+    const displayNews = document.querySelector(".home-site-header")
+      ? publicNews.slice(0, 2)
+      : publicNews;
+
+    renderNews(displayNews, newsList);
   } catch (error) {
     console.error(error);
     newsList.innerHTML =
@@ -94,7 +98,11 @@ async function loadSchedule() {
       .filter((row) => isChecked(row["表示する"]))
       .sort(compareScheduleItems);
 
-    renderSchedule(publicSchedules, scheduleList);
+    const displaySchedules = document.querySelector(".home-site-header")
+      ? publicSchedules.slice(0, 2)
+      : publicSchedules;
+
+    renderSchedule(displaySchedules, scheduleList);
   } catch (error) {
     console.error(error);
     scheduleList.innerHTML =
