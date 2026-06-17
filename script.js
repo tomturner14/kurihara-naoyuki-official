@@ -13,12 +13,16 @@ const SCHEDULE_CSV_URL =
 const CONTACT_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS30hnzMlKNn3KQp4ZDetB1xmt8oL8cT7b77t9i4z8D24PV9yzBJ9tBWq1pQgVFBdjTtbPcWngG_8o2/pub?gid=2088961688&single=true&output=csv";
 
+const DISCOGRAPHY_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS30hnzMlKNn3KQp4ZDetB1xmt8oL8cT7b77t9i4z8D24PV9yzBJ9tBWq1pQgVFBdjTtbPcWngG_8o2/pub?gid=2047365638&single=true&output=csv";
+
 document.addEventListener("DOMContentLoaded", () => {
   loadSite();
   loadProfile();
   loadNews();
   loadSchedule();
   loadContact();
+  loadDiscography();
 });
 
 async function loadSite() {
@@ -113,6 +117,28 @@ async function loadContact() {
   } catch (error) {
     console.error(error);
     contactContent.innerHTML = '<p class="muted">お問い合わせ情報を読み込めませんでした。</p>';
+  }
+}
+
+async function loadDiscography() {
+  const discographyContent = document.querySelector("#discography-content");
+
+  if (!discographyContent) {
+    return;
+  }
+
+  try {
+    const rows = await fetchCsvObjects(DISCOGRAPHY_CSV_URL);
+
+    const publicDiscographyItems = rows
+      .filter((row) => isChecked(row["表示する"]) && row["ID"] && row["タイトル"])
+      .sort(compareDiscographyItems);
+
+    renderDiscography(publicDiscographyItems, discographyContent);
+  } catch (error) {
+    console.error(error);
+    discographyContent.innerHTML =
+      '<p class="muted">ディスコグラフィーを読み込めませんでした。</p>';
   }
 }
 
@@ -216,6 +242,235 @@ function renderContact(contactItems, container) {
   }
 
   container.innerHTML = contactItems.map(createContactBlockHtml).join("");
+}
+
+function renderDiscography(discographyItems, container) {
+  if (discographyItems.length === 0) {
+    container.innerHTML = '<p class="muted">現在、掲載中の作品はありません。</p>';
+    return;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const detailId = params.get("id");
+
+  if (detailId) {
+    renderDiscographyDetail(discographyItems, container, detailId);
+    return;
+  }
+
+  renderDiscographyList(discographyItems, container, params.get("genre"));
+}
+
+function renderDiscographyList(discographyItems, container, currentGenre) {
+  const genres = createDiscographyGenres(discographyItems);
+  const selectedGenre = currentGenre || "ALL";
+  const visibleItems =
+    selectedGenre === "ALL"
+      ? discographyItems
+      : discographyItems.filter((item) => item["ジャンル"] === selectedGenre);
+
+  const filterHtml = createDiscographyFilterHtml(genres, selectedGenre);
+
+  const listHtml =
+    visibleItems.length > 0
+      ? `<div class="discography-grid">${visibleItems
+          .map(createDiscographyCardHtml)
+          .join("")}</div>`
+      : '<p class="muted">このジャンルの作品は現在ありません。</p>';
+
+  container.innerHTML = `
+    ${filterHtml}
+    ${listHtml}
+  `;
+}
+
+function renderDiscographyDetail(discographyItems, container, detailId) {
+  const item = discographyItems.find((discographyItem) => discographyItem["ID"] === detailId);
+
+  if (!item) {
+    container.innerHTML = `
+      <p class="muted">指定された作品が見つかりませんでした。</p>
+      <p class="card-link"><a href="discography.html">一覧に戻る</a></p>
+    `;
+    return;
+  }
+
+  container.innerHTML = createDiscographyDetailHtml(item);
+}
+
+function createDiscographyGenres(discographyItems) {
+  const genres = discographyItems
+    .map((item) => item["ジャンル"])
+    .filter(Boolean);
+
+  return [...new Set(genres)];
+}
+
+function createDiscographyFilterHtml(genres, selectedGenre) {
+  const allClass = selectedGenre === "ALL" ? " is-active" : "";
+
+  const genreLinks = genres
+    .map((genre) => {
+      const activeClass = genre === selectedGenre ? " is-active" : "";
+      return `<a class="discography-filter-link${activeClass}" href="discography.html?genre=${encodeURIComponent(
+        genre
+      )}">${escapeHtml(genre)}</a>`;
+    })
+    .join("");
+
+  return `
+    <nav class="discography-filter" aria-label="ディスコグラフィーフィルター">
+      <a class="discography-filter-link${allClass}" href="discography.html">ALL</a>
+      ${genreLinks}
+    </nav>
+  `;
+}
+
+function createDiscographyCardHtml(item) {
+  const id = item["ID"];
+  const title = escapeHtml(item["タイトル"] || "");
+  const englishTitle = escapeHtml(item["英字タイトル"] || "");
+  const genre = escapeHtml(item["ジャンル"] || "");
+  const releaseDate = escapeHtml(item["発売日"] || "");
+  const jacketUrl = item["ジャケット画像URL"] || "";
+
+  const englishTitleHtml = englishTitle
+    ? `<p class="discography-card-subtitle">${englishTitle}</p>`
+    : "";
+  const genreHtml = genre ? `<p class="discography-card-meta">${genre}</p>` : "";
+  const releaseDateHtml = releaseDate
+    ? `<p class="discography-card-date">${releaseDate}</p>`
+    : "";
+
+  return `
+    <a class="discography-card" href="discography.html?id=${escapeAttribute(encodeURIComponent(id))}">
+      <div class="discography-cover">
+        ${createDiscographyCoverHtml(jacketUrl, title)}
+      </div>
+      <div class="discography-card-body">
+        ${genreHtml}
+        <h3>${title}</h3>
+        ${englishTitleHtml}
+        ${releaseDateHtml}
+      </div>
+    </a>
+  `;
+}
+
+function createDiscographyDetailHtml(item) {
+  const title = escapeHtml(item["タイトル"] || "");
+  const englishTitle = escapeHtml(item["英字タイトル"] || "");
+  const genre = escapeHtml(item["ジャンル"] || "");
+  const releaseDate = escapeHtml(item["発売日"] || "");
+  const description = escapeHtml(item["説明"] || "");
+  const jacketUrl = item["ジャケット画像URL"] || "";
+
+  const englishTitleHtml = englishTitle
+    ? `<p class="discography-detail-subtitle">${englishTitle}</p>`
+    : "";
+  const genreHtml = genre ? `<span class="tag">${genre}</span>` : "";
+  const releaseDateHtml = releaseDate ? `<p class="date">${releaseDate}</p>` : "";
+  const descriptionHtml = description ? `<p>${description}</p>` : "";
+  const serviceLinksHtml = createDiscographyServiceLinksHtml(item);
+
+  return `
+    <p class="card-link discography-back-link"><a href="discography.html">一覧に戻る</a></p>
+
+    <article class="discography-detail">
+      <div class="discography-detail-cover">
+        ${createDiscographyCoverHtml(jacketUrl, title)}
+      </div>
+
+      <div class="discography-detail-body">
+        <div class="card-meta">
+          ${releaseDateHtml}
+          ${genreHtml}
+        </div>
+        <h2>${title}</h2>
+        ${englishTitleHtml}
+        ${descriptionHtml}
+        ${serviceLinksHtml}
+      </div>
+    </article>
+  `;
+}
+
+function createDiscographyCoverHtml(jacketUrl, altText) {
+  const imageUrl = normalizeImageUrl(jacketUrl);
+
+  if (imageUrl) {
+    return `<img src="${escapeAttribute(imageUrl)}" alt="${escapeAttribute(altText)}のジャケット画像" />`;
+  }
+
+  return '<div class="discography-no-image">No Image</div>';
+}
+
+function normalizeImageUrl(url) {
+  const imageUrl = String(url || "").trim();
+
+  if (!imageUrl) {
+    return "";
+  }
+
+  if (!imageUrl.includes("drive.google.com")) {
+    return imageUrl;
+  }
+
+  const fileIdMatch =
+    imageUrl.match(/\/file\/d\/([^/]+)/) || imageUrl.match(/[?&]id=([^&]+)/);
+
+  if (!fileIdMatch) {
+    return imageUrl;
+  }
+
+  const fileId = fileIdMatch[1];
+
+  return `https://drive.google.com/thumbnail?id=${encodeURIComponent(fileId)}&sz=w800`;
+}
+
+function createDiscographyServiceLinksHtml(item) {
+  const services = [
+    ["Apple Music", item["Apple Music URL"], "聴く"],
+    ["Spotify", item["Spotify URL"], "聴く"],
+    ["Amazon Music", item["Amazon Music URL"], "聴く"],
+    ["YouTube Music", item["YouTube Music URL"], "聴く"],
+    ["LINE MUSIC", item["LINE MUSIC URL"], "聴く"],
+    ["iTunes Store", item["iTunes Store URL"], "購入"],
+  ];
+
+  const otherLinkName = item["その他リンク名"] || "";
+  const otherLinkUrl = item["その他リンクURL"] || "";
+
+  if (otherLinkName && otherLinkUrl) {
+    services.push([otherLinkName, otherLinkUrl, "開く"]);
+  }
+
+  const links = services
+    .filter(([, url]) => url)
+    .map(
+      ([name, url, actionText]) => `
+        <a class="discography-service-link" href="${escapeAttribute(
+          url
+        )}" target="_blank" rel="noopener noreferrer">
+          <span>${escapeHtml(name)}</span>
+          <strong>${escapeHtml(actionText)}</strong>
+        </a>
+      `
+    )
+    .join("");
+
+  if (!links) {
+    return '<p class="muted">配信リンクは現在準備中です。</p>';
+  }
+
+  return `
+    <div class="discography-services" aria-label="配信サービス">
+      <h3>Streaming / Store</h3>
+      <div class="discography-service-list">
+        ${links}
+      </div>
+    </div>
+  `;
 }
 
 function createProfileBlockHtml(item) {
@@ -420,6 +675,31 @@ function escapeHtml(value) {
 
 function escapeAttribute(value) {
   return escapeHtml(value).replaceAll("`", "&#096;");
+}
+
+function compareDiscographyItems(a, b) {
+  const dateResult = compareDateDesc(a["発売日"], b["発売日"]);
+
+  if (dateResult !== 0) {
+    return dateResult;
+  }
+
+  const orderA = parseSortOrder(a["並び順"]);
+  const orderB = parseSortOrder(b["並び順"]);
+
+  if (orderA !== null && orderB !== null && orderA !== orderB) {
+    return orderA - orderB;
+  }
+
+  if (orderA !== null && orderB === null) {
+    return -1;
+  }
+
+  if (orderA === null && orderB !== null) {
+    return 1;
+  }
+
+  return String(a["タイトル"] || "").localeCompare(String(b["タイトル"] || ""), "ja");
 }
 
 // 並び順ルール:
