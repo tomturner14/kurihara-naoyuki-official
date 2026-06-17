@@ -1432,3 +1432,56 @@ h3 {
     font-size: clamp(2.35rem, 10.5vw, 3.25rem);
   }
 }
+
+/* Lower page hero mobile adjustment */
+@media (max-width: 760px) {
+  .page-header {
+    min-height: 300px;
+  }
+
+  .page-header-inner {
+    min-height: 250px;
+    padding-top: 34px;
+    padding-bottom: 34px;
+  }
+
+  .page-header .eyebrow {
+    margin-bottom: 18px;
+    font-size: 0.8rem;
+    letter-spacing: 0.36em;
+  }
+
+  .page-header h1 {
+    max-width: 100%;
+    font-size: clamp(3rem, 15vw, 4.2rem);
+    line-height: 1.02;
+    letter-spacing: 0.02em;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .page-header .hero-subtitle {
+    margin-top: 18px;
+    font-size: 0.95rem;
+  }
+
+  .page-header .lead {
+    margin-top: 18px;
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+}
+
+@media (max-width: 420px) {
+  .page-header {
+    min-height: 280px;
+  }
+
+  .page-header-inner {
+    min-height: 235px;
+  }
+
+  .page-header h1 {
+    font-size: clamp(2.75rem, 13.6vw, 3.75rem);
+  }
+}
