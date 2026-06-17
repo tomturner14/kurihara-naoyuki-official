@@ -223,10 +223,19 @@ function renderProfile(profileItems, container) {
   container.innerHTML = profileItems.map(createProfileBlockHtml).join("");
 }
 
+
 function renderNews(newsItems, container) {
   if (newsItems.length === 0) {
     container.innerHTML =
       '<p class="muted">現在、掲載中のお知らせはありません。</p>';
+    return;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const detailId = params.get("id");
+
+  if (detailId) {
+    renderNewsDetail(newsItems, container, detailId);
     return;
   }
 
@@ -235,6 +244,21 @@ function renderNews(newsItems, container) {
     .join("");
 }
 
+function renderNewsDetail(newsItems, container, detailId) {
+  const item = newsItems.find((newsItem) => getManagedId(newsItem) === detailId);
+
+  if (!item) {
+    container.innerHTML = `
+      <p class="muted">指定されたお知らせが見つかりませんでした。</p>
+      <p class="card-link"><a href="news.html">一覧に戻る</a></p>
+    `;
+    return;
+  }
+
+  container.innerHTML = createNewsDetailHtml(item);
+}
+
+
 function renderSchedule(scheduleItems, container) {
   if (scheduleItems.length === 0) {
     container.innerHTML =
@@ -242,9 +266,33 @@ function renderSchedule(scheduleItems, container) {
     return;
   }
 
+  const params = new URLSearchParams(window.location.search);
+  const detailId = params.get("id");
+
+  if (detailId) {
+    renderScheduleDetail(scheduleItems, container, detailId);
+    return;
+  }
+
   container.innerHTML = scheduleItems
     .map((item, index) => createScheduleCardHtml(item, index === 0))
     .join("");
+}
+
+function renderScheduleDetail(scheduleItems, container, detailId) {
+  const item = scheduleItems.find(
+    (scheduleItem) => getManagedId(scheduleItem) === detailId,
+  );
+
+  if (!item) {
+    container.innerHTML = `
+      <p class="muted">指定された出演情報が見つかりませんでした。</p>
+      <p class="card-link"><a href="schedule.html">一覧に戻る</a></p>
+    `;
+    return;
+  }
+
+  container.innerHTML = createScheduleDetailHtml(item);
 }
 
 function renderContact(contactItems, container) {
@@ -603,7 +651,10 @@ function createContactBlockHtml(item) {
   `;
 }
 
+
+
 function createNewsCardHtml(item, isLatest = false) {
+  const id = getManagedId(item);
   const date = escapeHtml(item["公開日"] || "");
   const category = escapeHtml(item["種別"] || "");
   const title = escapeHtml(item["タイトル"] || "");
@@ -613,6 +664,23 @@ function createNewsCardHtml(item, isLatest = false) {
 
   const categoryHtml = category ? `<span class="tag">${category}</span>` : "";
   const latestBadgeHtml = isLatest ? '<span class="new-badge">NEW</span>' : "";
+  const detailUrl = id
+    ? `news.html?id=${escapeAttribute(encodeURIComponent(id))}`
+    : "";
+
+  if (detailUrl) {
+    return `
+      <a class="card card-clickable" href="${detailUrl}" aria-label="${title}の詳細を見る">
+        <div class="card-meta">
+          <p class="date">${date}</p>
+          ${categoryHtml}
+          ${latestBadgeHtml}
+        </div>
+        <h3>${title}</h3>
+        <p>${body}</p>
+      </a>
+    `;
+  }
 
   const linkHtml =
     linkText && linkUrl
@@ -633,7 +701,56 @@ function createNewsCardHtml(item, isLatest = false) {
   `;
 }
 
+function createNewsDetailHtml(item) {
+  const date = escapeHtml(item["公開日"] || "");
+  const category = escapeHtml(item["種別"] || "");
+  const title = escapeHtml(item["タイトル"] || "");
+  const summary = escapeHtml(item["本文"] || "");
+  const detailBody = item["詳細本文"] || item["詳細"] || "";
+  const imageUrl = item["画像URL"] || item["画像"] || "";
+  const linkText = escapeHtml(item["リンク文字"] || "");
+  const linkUrl = item["リンクURL"] || "";
+
+  const categoryHtml = category ? `<span class="tag">${category}</span>` : "";
+  const dateHtml = date ? `<p class="date">${date}</p>` : "";
+  const summaryHtml = summary ? `<p class="detail-lead">${summary}</p>` : "";
+  const detailBodyHtml = createTextBlockHtml(detailBody);
+  const imageHtml = imageUrl
+    ? `
+      <figure class="detail-image">
+        <img src="${escapeAttribute(normalizeImageUrl(imageUrl))}" alt="${title}">
+      </figure>
+    `
+    : "";
+  const linkHtml =
+    linkText && linkUrl
+      ? `<p class="card-link detail-main-link"><a href="${escapeAttribute(linkUrl)}" target="_blank" rel="noopener noreferrer">${linkText}</a></p>`
+      : "";
+
+  return `
+    <p class="card-link detail-back-link"><a href="news.html">一覧に戻る</a></p>
+
+    <article class="detail-card">
+      ${imageHtml}
+
+      <div class="detail-card-body">
+        <div class="card-meta">
+          ${dateHtml}
+          ${categoryHtml}
+        </div>
+
+        <h2>${title}</h2>
+        ${summaryHtml}
+        ${detailBodyHtml}
+        ${linkHtml}
+      </div>
+    </article>
+  `;
+}
+
+
 function createScheduleCardHtml(item, isLatest = false) {
+  const id = getManagedId(item);
   const date = escapeHtml(item["開催日"] || "");
   const startTime = escapeHtml(item["開始時刻"] || "");
   const endTime = escapeHtml(item["終了時刻"] || "");
@@ -647,12 +764,30 @@ function createScheduleCardHtml(item, isLatest = false) {
   const latestBadgeHtml = isLatest ? '<span class="new-badge">NEW</span>' : "";
   const timeText = createTimeText(startTime, endTime);
   const placeText = [venue, area].filter(Boolean).join(" / ");
+  const detailUrl = id
+    ? `schedule.html?id=${escapeAttribute(encodeURIComponent(id))}`
+    : "";
 
   const timeHtml = timeText ? `<p class="schedule-detail">${timeText}</p>` : "";
   const placeHtml = placeText
     ? `<p class="schedule-detail">${escapeHtml(placeText)}</p>`
     : "";
   const detailHtml = detail ? `<p>${detail}</p>` : "";
+
+  if (detailUrl) {
+    return `
+      <a class="card card-clickable" href="${detailUrl}" aria-label="${title}の詳細を見る">
+        <div class="card-meta">
+          <p class="date">${date}</p>
+          ${latestBadgeHtml}
+        </div>
+        <h3>${title}</h3>
+        ${timeHtml}
+        ${placeHtml}
+        ${detailHtml}
+      </a>
+    `;
+  }
 
   const linkHtml =
     linkText && linkUrl
@@ -672,6 +807,100 @@ function createScheduleCardHtml(item, isLatest = false) {
       ${linkHtml}
     </article>
   `;
+}
+
+function createScheduleDetailHtml(item) {
+  const date = escapeHtml(item["開催日"] || "");
+  const startTime = escapeHtml(item["開始時刻"] || "");
+  const endTime = escapeHtml(item["終了時刻"] || "");
+  const title = escapeHtml(item["イベント名"] || "");
+  const venue = escapeHtml(item["会場名"] || "");
+  const area = escapeHtml(item["地域"] || "");
+  const address = escapeHtml(item["住所"] || "");
+  const price = escapeHtml(item["料金"] || "");
+  const performers = escapeHtml(item["出演者"] || item["出演"] || "");
+  const detail = item["詳細"] || "";
+  const detailBody = item["詳細本文"] || "";
+  const flyerUrl = item["フライヤー画像URL"] || item["画像URL"] || "";
+  const linkText = escapeHtml(item["リンク文字"] || "");
+  const linkUrl = item["リンクURL"] || "";
+
+  const timeText = createTimeText(startTime, endTime);
+  const placeText = [venue, area].filter(Boolean).join(" / ");
+
+  const metaRows = [
+    ["日程", date],
+    ["時間", timeText],
+    ["会場", placeText],
+    ["住所", address],
+    ["料金", price],
+    ["出演", performers],
+  ]
+    .filter(([, value]) => value)
+    .map(
+      ([label, value]) => `
+        <div class="detail-info-row">
+          <dt>${escapeHtml(label)}</dt>
+          <dd>${escapeHtml(value)}</dd>
+        </div>
+      `,
+    )
+    .join("");
+
+  const infoHtml = metaRows ? `<dl class="detail-info-list">${metaRows}</dl>` : "";
+  const detailHtml = createTextBlockHtml(detail);
+  const detailBodyHtml = createTextBlockHtml(detailBody);
+
+  const flyerHtml = flyerUrl
+    ? `
+      <figure class="detail-image">
+        <img src="${escapeAttribute(normalizeImageUrl(flyerUrl))}" alt="${title}のフライヤー画像">
+      </figure>
+    `
+    : "";
+
+  const linkHtml =
+    linkText && linkUrl
+      ? `<p class="card-link detail-main-link"><a href="${escapeAttribute(linkUrl)}" target="_blank" rel="noopener noreferrer">${linkText}</a></p>`
+      : "";
+
+  return `
+    <p class="card-link detail-back-link"><a href="schedule.html">一覧に戻る</a></p>
+
+    <article class="detail-card">
+      ${flyerHtml}
+
+      <div class="detail-card-body">
+        <p class="date">${date}</p>
+        <h2>${title}</h2>
+        ${infoHtml}
+        ${detailHtml}
+        ${detailBodyHtml}
+        ${linkHtml}
+      </div>
+    </article>
+  `;
+}
+
+function getManagedId(item) {
+  return String(item["管理ID"] || item["ID"] || "").trim();
+}
+
+function createTextBlockHtml(text) {
+  const rawText = String(text || "").trim();
+
+  if (!rawText) {
+    return "";
+  }
+
+  const paragraphs = rawText
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+    .map((paragraph) => `<p>${escapeHtml(paragraph).replaceAll("\n", "<br>")}</p>`)
+    .join("");
+
+  return `<div class="detail-text">${paragraphs}</div>`;
 }
 
 function createTimeText(startTime, endTime) {
